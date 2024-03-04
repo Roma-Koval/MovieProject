@@ -7,45 +7,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.movieproject.data.repository.MoviesRepository
-import com.movieproject.ui.MovieInfo
 import com.movieproject.ui.Movie
-import com.movieproject.ui.main.UIState.Loading
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
 
-    private val movieState = MutableLiveData<UIState<PagingData<Movie>>>()
-    fun getMovieData(): LiveData<UIState<PagingData<Movie>>> = movieState
-
-
-    private val movieInfoState = MutableLiveData<UIState<MovieInfo>>()
-    fun getMovieInfoData(): LiveData<UIState<MovieInfo>> = movieInfoState
+    private val movieState = MutableLiveData<PagingData<Movie>>()
+    fun getMoviePagingDataState(): LiveData<PagingData<Movie>> = movieState
 
     init {
-        loadData()
+        loadMovieData()
     }
 
-    fun loadData() {
-//        movieState.value = Loading
+    fun loadMovieData() {
         viewModelScope.launch {
-            moviesRepository.getPagedMovies().cachedIn(viewModelScope)
+            moviesRepository.getPagedMovies()
+                .cachedIn(viewModelScope)
                 .collect {
-                    movieState.value = UIState.Success(it)
+                    movieState.value = it
                 }
         }
-    }
-
-    fun loadMovieInfo(movieId: Int) {
-        movieInfoState.value = Loading
-
-        viewModelScope.launch {
-            movieInfoState.value = moviesRepository.getMovieInfoData(movieId).mapRepositoryToUIState()
-        }
-    }
-
-    suspend fun getMovies(): Flow<PagingData<Movie>> {
-        return moviesRepository.getPagedMovies()
-            .cachedIn(viewModelScope)
     }
 }

@@ -1,6 +1,6 @@
 package com.movieproject.di
 
-import com.movieproject.ui.detail.DetailFragment
+import com.movieproject.ui.detail.DetailsFragment
 import com.movieproject.ui.main.MainFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -14,5 +14,5 @@ import javax.inject.Singleton
 )
 interface AppComponent {
     fun inject(mainFragment: MainFragment)
-    fun inject(detailFragment: DetailFragment)
+    fun inject(detailsFragment: DetailsFragment)
 }

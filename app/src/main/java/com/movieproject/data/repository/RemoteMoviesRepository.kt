@@ -26,21 +26,6 @@ class RemoteMoviesRepository(
         ).flow
     }
 
-//    override suspend fun getMoviesData(): RepositoryResult<List<Movie>> {
-//        return runCatching {
-//            movieService.getMovies(2)
-//        }.fold(
-//            onSuccess = {
-//                RepositoryResult.Success(it.result.map {
-//                    it.mapToMovie()
-//                })
-//            },
-//            onFailure = {
-//                RepositoryResult.Error(it)
-//            }
-//        )
-//    }
-
     override suspend fun getMovieInfoData(movieId: Int): RepositoryResult<MovieInfo> {
         return runCatching {
             movieService.getMovieInfo(movieId)

@@ -11,14 +11,6 @@ class MoviesAdapter(
     val mListener: OnItemClickListener
 ) : PagingDataAdapter<Movie, MovieViewHolder>(MovieDiffCallBack()) {
 
-//    private val movies: MutableList<Movie> = mutableListOf()
-//
-//    fun updateMovies(movie: List<Movie>) {
-//        movies.clear()
-//        movies.addAll(movie)
-//        notifyDataSetChanged()
-//    }
-
     interface OnItemClickListener {
         fun onItemClick(movie: Movie)
     }
@@ -39,10 +31,10 @@ class MoviesAdapter(
         return MovieViewHolder(itemBinding, mListener)
     }
 
-//    override fun getItemCount(): Int = movies.size
-
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(getItem(position)!!)
         holder.setIsRecyclable(false)
     }
+
+    override fun getItemViewType(position: Int): Int = MOVIE_ITEM_VIEW_TYPE
 }

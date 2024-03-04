@@ -7,25 +7,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.movieproject.App
 import com.movieproject.databinding.FragmentDetailBinding
 import com.movieproject.ui.MovieInfo
-import com.movieproject.ui.main.MainViewModel
-import com.movieproject.ui.main.MainViewModelFactory
 import com.movieproject.ui.main.UIState
 import java.text.NumberFormat
 import java.util.*
 import javax.inject.Inject
 
-class DetailFragment : Fragment() {
+class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
+    lateinit var detailViewModelFactory: DetailViewModelFactory
+
+    private val viewModel: DetailsViewModel by viewModels { detailViewModelFactory }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity?.application as App).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,19 +43,20 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity?.application as App).appComponent.inject(this)
-
         val movieId = arguments?.getInt(MOVIE_ID_KEY)
 
-        val mainViewModel: MainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
-
-        mainViewModel.loadMovieInfo(movieId!!)
+        viewModel.loadMovieInfo(movieId!!)
 
         binding.detailErrorButton.setOnClickListener {
-            mainViewModel.loadMovieInfo(movieId)
+            viewModel.loadMovieInfo(movieId)
+            binding.groupViews.isVisible = true
         }
 
-        mainViewModel.getMovieInfoData().observe(viewLifecycleOwner) { uiState ->
+        binding.detailToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
+        viewModel.getMovieInfoData().observe(viewLifecycleOwner) { uiState ->
             binding.detailProgressBar.isVisible = uiState is UIState.Loading
             binding.detailErrorText.isVisible = uiState is UIState.Error
             binding.detailErrorButton.isVisible = uiState is UIState.Error
@@ -71,8 +77,10 @@ class DetailFragment : Fragment() {
                 binding.duration.text = uiState.data.duration.toString()
                 binding.overview.text = uiState.data.overview
 
+                binding.detailToolbar.title = uiState.data.title
             } else if (uiState is UIState.Error) {
                 binding.detailErrorText.text = uiState.error.message
+                binding.groupViews.isVisible = false
             }
         }
     }
@@ -87,7 +95,7 @@ class DetailFragment : Fragment() {
         const val DETAIL_FRAGMENT_NAME = "DetailFragment"
 
         fun newInstance(movieId: Int) =
-            DetailFragment().apply {
+            DetailsFragment().apply {
                 arguments = bundleOf(
                     MOVIE_ID_KEY to movieId
                 )

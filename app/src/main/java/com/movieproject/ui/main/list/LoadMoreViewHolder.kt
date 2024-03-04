@@ -12,8 +12,5 @@ class LoadMoreViewHolder(
 
     fun setData(state: LoadState) {
         binding.footerProgressBar.isVisible = state is Loading
-
-        val isLastPage = state.endOfPaginationReached && state is LoadState.NotLoading   // NOT working!
-        binding.textLastPage.isVisible = isLastPage
     }
 }
