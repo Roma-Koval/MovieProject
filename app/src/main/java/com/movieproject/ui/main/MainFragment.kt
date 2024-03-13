@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadState.Loading
 import androidx.recyclerview.widget.GridLayoutManager
@@ -65,12 +67,14 @@ class MainFragment : Fragment() {
         })
 
         binding.errorButton.setOnClickListener {
-            viewModel.loadMovieData()
+            moviesAdapter.refresh()
         }
 
-        viewModel.getMoviePagingDataState().observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                moviesAdapter.submitData(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.getPagingDataState().collect {
+                        moviesAdapter.submitData(it)
+                }
             }
         }
 
