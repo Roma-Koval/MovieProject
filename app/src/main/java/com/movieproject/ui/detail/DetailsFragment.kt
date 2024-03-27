@@ -16,8 +16,6 @@ import com.movieproject.App
 import com.movieproject.databinding.FragmentDetailBinding
 import com.movieproject.ui.MovieInfo
 import com.movieproject.ui.main.UIState
-import java.text.NumberFormat
-import java.util.*
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -70,20 +68,18 @@ class DetailsFragment : Fragment() {
                     if (uiState is UIState.Success<MovieInfo>) {
                         Glide.with(this@DetailsFragment).load(uiState.data.url)
                             .into(binding.poster)
+                        Glide.with(this@DetailsFragment).load(uiState.data.url)
+                            .into(binding.backgroundPoster)
 
-                        val formatCurrency = NumberFormat.getCurrencyInstance(Locale.US)
-                        binding.budget.text = formatCurrency.format(uiState.data.budget)
-                        binding.revenue.text = formatCurrency.format(uiState.data.revenue)
-
-                        binding.detailTitle.text = uiState.data.title
                         binding.releaseDate.text = uiState.data.releaseDate
                         binding.genres.text = uiState.data.genres.joinToString { it }
                         binding.rating.text = uiState.data.rating.toString()
-                        binding.totalVotes.text = uiState.data.totalVote.toString()
                         binding.duration.text = uiState.data.duration.toString()
                         binding.overview.text = uiState.data.overview
 
                         binding.detailToolbar.title = uiState.data.title
+
+                        binding.groupViews.isVisible = true
                     } else if (uiState is UIState.Error) {
                         binding.detailErrorText.text = uiState.error.message
                         binding.groupViews.isVisible = false

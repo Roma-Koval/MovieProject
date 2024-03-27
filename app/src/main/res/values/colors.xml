@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white_text">#FFFFFFFF</color>
     <color name="red_error_text">#B60101</color>
-    <color name="background_app">#E1E8ED</color>
-    <color name="background_toolbar">#DCE0E3</color>
+    <color name="background_app">#292C3E</color>
+    <color name="background_toolbar">#292C3E</color>
+    <color name="background_cardView">#343745</color>
+    <color name="button_color">#3949AB</color>
 </resources>

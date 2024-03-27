@@ -26,6 +26,7 @@ class RemoteMoviesRepositoryTest {
         val movieId = 1
         val expected = remoteMoviesRepository.getMovieInfoData(movieId)
         assertTrue(expected is Success)
+        assertEquals((expected as Success).result.title, movieInfoModel.title)
         coVerify { movieService.getMovieInfo(movieId) }
     }
 

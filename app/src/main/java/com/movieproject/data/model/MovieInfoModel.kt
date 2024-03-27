@@ -12,7 +12,7 @@ data class MovieInfoModel(
     @SerializedName("budget")
     val budget: Int,
     @SerializedName("revenue")
-    val revenue: Int,
+    val revenue: Long,
     @SerializedName("runtime")
     val duration: Int,
     @SerializedName("vote_average")

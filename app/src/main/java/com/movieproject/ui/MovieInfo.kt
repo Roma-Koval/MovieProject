@@ -5,7 +5,7 @@ data class MovieInfo(
     val url: String,
     val releaseDate: String,
     val budget: Int,
-    val revenue: Int,
+    val revenue: Long,
     val duration: Int,
     val rating: Double,
     val totalVote: Int,

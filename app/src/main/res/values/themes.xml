@@ -6,4 +6,12 @@
     </style>
 
     <style name="Theme.MovieProject" parent="Base.Theme.MovieProject" />
+
+    <style name="progressBarColor" parent="Base.Theme.MovieProject">
+        <item name="colorAccent">@color/white_text</item>
+    </style>
+
+    <style name="cornerImageView">
+        <item name="cornerSize">6%</item>
+    </style>
 </resources>
